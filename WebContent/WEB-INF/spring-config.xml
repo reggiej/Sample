@@ -1,0 +1,52 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+		   		 xmlns:beans="http://www.springframework.org/schema/beans"
+		   		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		   		 xmlns:aop="http://www.springframework.org/schema/aop" 
+	       		 xmlns:util="http://www.springframework.org/schema/util"
+	       		 xmlns:context="http://www.springframework.org/schema/context"
+	       		 xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+						http://www.springframework.org/schema/security 
+						http://www.springframework.org/schema/security/spring-security-3.2.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-3.2.xsd"> 
+
+ 
+<!-- Authentication Entry Point and Processing Filter -->
+     <http auto-config="true"  >
+     <intercept-url pattern="/login**" access="ROLE_USER" />
+     
+    <form-login login-page="/login.xhtml"
+                         default-target-url="/hide/gotoPage.xhtml"
+                         authentication-failure-url="/hide/accessDenied.xhtml?error"
+                         username-parameter="username"
+			             password-parameter="password"/>
+                  <logout logout-success-url="/hide/logoutPage.xhtml"/>       
+    
+    
+    <!-- intercept patterns -->
+    <!-- <intercept-url pattern="hide/login.xhtml" /> -->
+    <!-- <intercept-url pattern="/j_spring_security_check" />
+    <intercept-url pattern="hide/admin/**" access="ROLE_ADMIN"/>
+    <intercept-url pattern="hide/**" access="ROLE_ANONYMOUS"/>  -->   
+    <!-- Concurrent Session Settings -->
+    <session-management>
+    <concurrency-control max-sessions="10"/>
+    </session-management>   
+</http> 
+
+<authentication-manager>
+<authentication-provider>
+<user-service>
+<user password="123456" name="admin"  authorities="ROLE_USER"/>
+<user password="user"  name="user" authorities="ROLE_USER"/>
+</user-service>
+</authentication-provider>
+</authentication-manager>
+
+<!-- Security Messages -->
+<beans:bean id="messageSource"
+ class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+ <beans:property name="basename" value="org./springframework/security/messages"/>
+ </beans:bean>
+</beans:beans>
